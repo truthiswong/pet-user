@@ -1,0 +1,82 @@
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "宠主小助手",
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"backgroundColor": "#FFFFFF",
+				"backgroundColorTop": "#FFFFFF",
+				"h5": {
+					"titleNView": {
+						"backgroundColor": "#FFFFFF"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/tabs/tab1",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/tab1/myAppointment",
+			"style": {
+				"navigationBarTitleText": "我的预约",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path": "pages/tab1/illnessBill",
+			"style": {
+				"navigationBarTitleText": "病例账单",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path": "pages/tab1/illnessBillDetail",
+			"style": {
+				"navigationBarTitleText": "病例明细",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path": "pages/tab1/testReport",
+			"style": {
+				"navigationBarTitleText": "检测报告",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path": "pages/tab1/feeBill",
+			"style": {
+				"navigationBarTitleText": "消费记录",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path": "pages/tab1/feeBillDetail",
+			"style": {
+				"navigationBarTitleText": "账单详情",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path": "pages/tab1/appointment",
+			"style": {
+				"navigationBarTitleText": "在线预约",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
