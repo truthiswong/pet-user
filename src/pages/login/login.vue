@@ -103,6 +103,7 @@
 						id: 3
 					}).then(res => {
 						console.log(res)
+						this.$u.vuex('vuex_token', "token")
 						this.$refs.uToast.show({
 							title: '登录成功',
 							type: 'success',
@@ -112,7 +113,7 @@
 					})
 					// 调用getInfo接口
 					this.$u.api.getInfo({
-						id: 3
+						id: 5
 					}).then(res => {
 						console.log(res);
 					})

@@ -40,6 +40,7 @@
 		onLoad() {},
 		onShow() {
 			console.log(this.$moment().format('YYYY-MM-DD dddd'))
+			console.log(this.vuex_token)
 			var a = document.getElementsByClassName('uni-page-head-hd')[0]
 			a.style.display = 'none';
 		},
