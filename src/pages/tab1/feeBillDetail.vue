@@ -36,6 +36,8 @@
 				</view>
 			</view>
 		</view>
+		<u-toast ref="uToast" />
+		<u-no-network></u-no-network>
 	</view>
 </template>
 

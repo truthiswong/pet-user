@@ -9,7 +9,8 @@
 						<u-icon name="arrow-right" style="margin-left: 30rpx;" color="#B1B6BE" size="28"></u-icon>
 					</view>
 				</u-cell-item>
-				<u-cell-item v-show="petList.length>0" @click="showPet = true" :center="true" :arrow="false" hover-class="none" class="list_item">
+				<u-cell-item v-show="petList.length>0" @click="showPet = true" :center="true" :arrow="false" hover-class="none"
+				 class="list_item">
 					<view slot="title" class="list_item_title">预约宠物</view>
 					<view slot="right-icon" class="list_item_right" :class="petValue?'list_item_right_active':''">
 						<view>
@@ -70,19 +71,20 @@
 			 :safe-area-inset-bottom="true"></u-select>
 		</view>
 		<view class="">
-			<u-action-sheet @click="onServe" :list="list" :safe-area-inset-bottom="true" confirm-color="#00AEA5" v-model="showServe"></u-action-sheet>
+			<u-action-sheet @click="onServe" :list="serveList" :safe-area-inset-bottom="true" confirm-color="#00AEA5" v-model="showServe"></u-action-sheet>
 		</view>
 		<view class="">
 			<u-picker mode="time" @confirm="onTime" v-model="showTime" :params="params" title="预约时间" :safe-area-inset-bottom="true"
 			 confirm-color="#00AEA5"></u-picker>
 		</view>
-		<u-toast ref="uToast" />
 		<view class="custom_button">
 			<u-button @click="onNow" type="primary" style="height: 100%;line-height: 100%;border-radius: 0;" :ripple="true"
 			 shape="square">
 				<text>立即预约</text>
 			</u-button>
 		</view>
+		<u-toast ref="uToast" />
+		<u-no-network></u-no-network>
 	</view>
 </template>
 
@@ -110,6 +112,8 @@
 						label: '瑞哥'
 					}
 				],
+				showPet: false,
+				petValue: '',
 				showPetType: false,
 				petTypeValue: '',
 				petTypeList: [{
@@ -137,9 +141,7 @@
 						label: '其他'
 					}
 				],
-				showPet: false,
-				petValue: '',
-				list: [{
+				serveList: [{
 					text: '门诊预约',
 					color: '#323232',
 					fontSize: 30
@@ -176,13 +178,19 @@
 			}
 		},
 		onLoad() {},
-		onShow() {},
+		onShow() {
+			this.getPetList()
+			this.getServeList()
+		},
 		onPullDownRefresh() {},
 		onPageScroll(options) {
 			if (options.scrollTop > 60) {} else {}
 		},
 		onTabItemTap(e) {},
 		methods: {
+			btnAClick() {
+							console.log('btnClick');
+						},
 			onHospital(e) {
 				console.log(e)
 				this.hospitalValue = e[0].label
@@ -196,15 +204,15 @@
 				this.petTypeValue = e[0].label
 			},
 			onServe(index) {
-				console.log(`点击了第${index + 1}项，内容为：${this.list[index].text}`)
-				this.serveValue = this.list[index].text
+				console.log(`点击了第${index + 1}项，内容为：${this.serveList[index].text}`)
+				this.serveValue = this.serveList[index].text
 			},
 			onTime(e) {
 				console.log(e)
 				this.timeValue = `${e.year}-${e.month}-${e.day} ${e.hour}:${e.minute}`
 			},
 			onNow() {
-				console.log(this.petValue)
+				console.log("55555555")
 				if (!this.hospitalValue) {
 					this.$refs.uToast.show({
 						title: '请选择就诊医院',
@@ -213,6 +221,11 @@
 				} else if (!this.petValue) {
 					this.$refs.uToast.show({
 						title: '请选择宠物',
+						type: 'warning',
+					})
+				} else if (!this.petTypeValue) {
+					this.$refs.uToast.show({
+						title: '请选择宠物类型',
 						type: 'warning',
 					})
 				} else if (!this.serveValue) {
@@ -226,9 +239,53 @@
 						type: 'warning',
 					})
 				} else {
-
+					this.$u.api.appointment({
+						hospital: this.hospitalValue,
+						petName: this.petValue,
+						petType: this.petTypeValue,
+						type: this.serveValue,
+						appointmentDate: this.timeValue,
+						remark: this.markValue
+					}).then(res => {
+						if (res.success) {
+							this.$u.route({
+								type: "back",
+							})
+						}
+					})
 				}
-			}
+			},
+			getHospitalList() {
+				this.$u.api.hospitalList({}).then(res => {
+					if (res.success) {
+						console.log(res)
+						// this.hospitalList = res.data
+					}
+				})
+			},
+			getPetList() {
+				this.$u.api.petList({}).then(res => {
+					if (res.success) {
+						console.log(res)
+						// this.petList = res.data
+					}
+				})
+			},
+			getPetTypeList() {
+				this.$u.api.petTypeList({}).then(res => {
+					if (res.success) {
+						console.log(res)
+						// this.petTypeList = res.data
+					}
+				})
+			},
+			getServeList() {
+				this.$u.api.serveList({}).then(res => {
+					if (res.success) {
+						// this.serveList = res.data
+					}
+				})
+			},
 		}
 	}
 </script>

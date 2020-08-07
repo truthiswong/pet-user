@@ -23,6 +23,11 @@
 				</u-collapse-item>
 			</u-collapse>
 		</view>
+		<u-loadmore :status="status" v-show="!noData" icon-type="flower" :load-text="customLoadText" bg-color="rgba(249, 249, 249, 1)"
+		 font-size="24" margin-bottom="20" />
+		<u-empty text="暂时没有数据" v-show="noData"></u-empty>
+		<u-toast ref="uToast" />
+		<u-no-network></u-no-network>
 	</view>
 </template>
 
@@ -129,13 +134,50 @@
 						title: '医嘱',
 						name: '注意不要吃生冷食物'
 					}]
+				}, {
+					head: "骨折（豆豆）",
+					time: '2020-02-02',
+					describe: '就诊于 xxxxxx医院',
+					open: false,
+					infoList: [{
+						title: '治疗科目',
+						name: 'xxxxx医院'
+					}, {
+						title: '病情分类',
+						name: '豆豆'
+					}, {
+						title: '就诊时间',
+						name: '2020-04-20  12:00'
+					}, {
+						title: '主治医生',
+						name: '圆滑'
+					}, {
+						title: '宠物体重',
+						name: '100kg'
+					}, {
+						title: '主诉记录',
+						name: '腹痛、口臭'
+					}, {
+						title: '病情诊断',
+						name: '豆豆的胃炎犯了'
+					}, {
+						title: '处理治疗',
+						name: '胃必治一盒'
+					}, {
+						title: '医嘱',
+						name: '注意不要吃生冷食物'
+					}]
 				}],
 				headerStyle: {
 					width: '100%',
 					'padding': '10rpx 10rpx 10rpx 30rpx',
 					'align-items': 'flex-end',
 					'font-size': '24rpx'
-				}
+				},
+				noData: false,
+				pageNumber: 0,
+				totalPages: 1,
+				status: 'loading'
 			}
 		},
 		onLoad() {},
@@ -144,7 +186,9 @@
 		onPageScroll(options) {
 			if (options.scrollTop > 60) {} else {}
 		},
-		onTabItemTap(e) {},
+		onReachBottom() {
+			console.log(3333333)
+		},
 		methods: {
 			onCall(phone) {
 				uni.showModal({
@@ -181,8 +225,9 @@
 			.list_item {
 				background: rgba(255, 255, 255, 1);
 				margin: 10rpx 0;
+
 				.u-arrow-down-icon {
-				    font-size: 24rpx;
+					font-size: 24rpx;
 				}
 
 				.item_title {

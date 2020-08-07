@@ -1,32 +1,36 @@
 <template>
 	<view class="page">
-		<view class="page_top">
-			<u-row gutter="60" justify="between" align="center">
-				<u-col span="8" style="height: 60rpx;">
-					<view class="page_text" :class="dateValue?'page_text_active':''" @click="show = true">{{dateValue?dateValue:'开始日期 ~ 结束日期'}}</view>
-				</u-col>
-				<u-col span="3" style="text-align: right;height: 60rpx;">
-					<u-button @click="onSearch" type="primary"  style="height: 100%;line-height: 100%;" :ripple="true" shape="square">
-						<text>搜索</text>
-					</u-button>
-				</u-col>
-			</u-row>
-		</view>
+		<u-sticky>
+			<view class="page_top">
+				<u-row gutter="60" justify="between" align="center">
+					<u-col span="8" style="height: 60rpx;">
+						<view class="page_text" :class="dateValue?'page_text_active':''" @click="show = true">{{dateValue?dateValue:'开始日期 ~ 结束日期'}}</view>
+					</u-col>
+					<u-col span="3" style="text-align: right;height: 60rpx;">
+						<u-button @click="onSearch" type="primary" style="height: 100%;line-height: 100%;" :ripple="true" shape="square">
+							<text>搜索</text>
+						</u-button>
+					</u-col>
+				</u-row>
+			</view>
+		</u-sticky>
 		<view class="list">
-			<u-cell-group :border="false" class="list_group" v-for="(item,index) in list" :key="index">
+			<u-cell-group :border="false" class="list_group" v-for="(item,index) in 6" :key="index">
 				<u-cell-item @click="goto(index)" :center="true" :border-bottom="false" hover-class="none" class="list_item">
-					<view slot="title" class="list_item_title">{{item.title}}</view>
+					<view slot="title" class="list_item_title">骨折（乐乐）</view>
 					<view slot="label" class="list_item_label">
-						<text>{{item.describe}}</text>
+						<text>2020-03-23 19:00:09（周二） 主治医师：张三</text>
 					</view>
 				</u-cell-item>
 			</u-cell-group>
 		</view>
+		<u-loadmore :status="status" v-show="!noData && searchLoading" icon-type="flower" :load-text="customLoadText"
+		 bg-color="rgba(249, 249, 249, 1)" font-size="24" margin-bottom="20" />
+		<u-empty margin-top='-90' text="暂时没有数据" v-show="noData"></u-empty>
 		<u-toast ref="uToast" />
-		<view class="">
-			<u-calendar v-model="show" mode="range" max-date="2150-01-01" active-bg-color="#00AEA5" range-bg-color="rgba(55, 174, 165, 0.3)"
-			 :safe-area-inset-bottom="true" @change="onChange"></u-calendar>
-		</view>
+		<u-no-network></u-no-network>
+		<u-calendar v-model="show" mode="range" max-date="2150-01-01" active-bg-color="#00AEA5" range-bg-color="rgba(55, 174, 165, 0.3)"
+		 :safe-area-inset-bottom="true" @change="onChange"></u-calendar>
 	</view>
 </template>
 
@@ -38,19 +42,12 @@
 				dateValue: '',
 				dateValueStart: '',
 				dateValueEnd: '',
-				list: [{
-					id: 0,
-					title: '骨折（豆豆）',
-					describe: '2020-03-23 19:00:09（周二）   主治医师：张三'
-				}, {
-					id: 1,
-					title: '狂犬病（花花）',
-					describe: '2020-03-23 19:00:09（周二）   主治医师：王华'
-				}, {
-					id: 2,
-					title: '骨折（乐乐）',
-					describe: '2020-03-23 19:00:09（周二）   主治医师：张三'
-				}]
+				list: [],
+				noData: false,
+				pageNumber: 0,
+				totalPages: 1,
+				status: 'loading',
+				searchLoading: false
 			}
 		},
 		onLoad() {},
@@ -58,6 +55,9 @@
 		onPullDownRefresh() {},
 		onPageScroll(options) {
 			if (options.scrollTop > 60) {} else {}
+		},
+		onReachBottom() {
+			console.log(3333333)
 		},
 		methods: {
 			onChange(e) {
@@ -73,7 +73,10 @@
 						type: 'warning',
 					})
 				} else {
-
+					this.searchLoading = true
+					setTimeout(() => {
+						this.noData = true
+					}, 3000)
 				}
 			},
 			goto(index) {
@@ -96,10 +99,9 @@
 		height: 100%;
 
 		.page_top {
-			height: 100rpx;
-			padding: 30rpx 0 10rpx;
+			padding: 10rpx 0 20rpx;
 			background-color: #FFFFFF;
-			
+
 			.page_text {
 				font-size: 28rpx;
 				height: 60rpx;
@@ -107,10 +109,10 @@
 				font-weight: 400;
 				color: rgba(177, 182, 190, 1);
 				letter-spacing: 1rpx;
-				background-color: rgba(246,248,251,1);
+				background-color: rgba(246, 248, 251, 1);
 				padding-left: 20rpx;
 			}
-			
+
 			.page_text_active {
 				color: rgba(50, 50, 50, 1);
 			}

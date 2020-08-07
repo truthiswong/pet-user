@@ -7,9 +7,9 @@
 					<view slot="label" class="list_item_label">
 						<u-row gutter="0">
 							<u-col span="6">
-								<text>预约 xxxxxx医院</text>
+								<text>预约 {{item.hospital}}</text>
 							</u-col>
-							<u-col span="6" @click="onCall(item.id)">
+							<u-col span="6" @click="onCall(item.tel)">
 								<u-icon size="28" color="#0153FE" name="phone-fill"></u-icon>
 								<text style="color: #0153FE;">联系医院</text>
 							</u-col>
@@ -34,7 +34,7 @@
 					<view slot="label" class="list_item_title">
 						<u-row gutter="0">
 							<u-col span="6">
-								<text>豆豆</text>
+								<text>{{item.petName}}</text>
 							</u-col>
 							<u-col span="6">
 								<text>2020-03-24 15:00</text>
@@ -47,7 +47,12 @@
 				</u-cell-item>
 			</u-cell-group>
 		</view>
+		<u-loadmore :status="status" v-show="!noData" icon-type="flower" :load-text="customLoadText" bg-color="rgba(249, 249, 249, 1)"
+		 font-size="24" margin-bottom="20" />
+		<u-empty text="暂时没有数据" v-show="noData"></u-empty>
 		<u-modal @confirm="onConfirm" v-model="show" :content="content" :show-cancel-button="true" confirm-color="#00aea5"></u-modal>
+		<u-toast ref="uToast" />
+		<u-no-network></u-no-network>
 	</view>
 </template>
 
@@ -61,24 +66,60 @@
 					background: '#00aea5',
 					color: '#FFFFFF'
 				},
-				list: [{
-					id: '1111'
-				}, {
-					id: '22222'
-				}, {
-					id: '333333'
-				}],
+				list: [],
+				noData: false,
+				pageNumber: 0,
+				totalPages: 1,
+				status: 'loading',
 				phone: ''
 			}
 		},
-		onLoad() {},
-		onShow() {},
+		onLoad() {
+		},
+		onShow() {
+			this.getMyAppointment()
+		},
 		onPullDownRefresh() {},
 		onPageScroll(options) {
 			if (options.scrollTop > 60) {} else {}
 		},
-		onTabItemTap(e) {},
+		onReachBottom() {
+			this.getMyAppointment()
+		},
 		methods: {
+			getMyAppointment() {
+				if (this.totalPages > this.pageNumber) {
+					this.$u.api.appointmentPage({
+						pageSize: 10,
+						pageNumber: this.pageNumber
+					}).then(res => {
+						if (res.success) {
+							if (this.pageNumber == 0) {
+								this.list = []
+							}
+							// res.data.data = []
+							if (res.data.data.length<=0) {
+								this.noData = true
+							}
+							this.pageNumber++
+							this.list = this.list.concat(res.data.data)
+							this.list.reverse()
+							this.status = 'loading'
+							this.totalPages = res.data.totalPages
+							if (this.totalPages == this.pageNumber) {
+								this.status = 'nomore'
+							}
+						} else {
+							this.$refs.uToast.show({
+								title: '请稍后再试...',
+								type: 'warning',
+							})
+						}
+					})
+				} else {
+					this.status = 'nomore'
+				}
+			},
 			onCall(phone) {
 				this.show = true
 				this.content = `是否要拨打医院电话 ${phone}`

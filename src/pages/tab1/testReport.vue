@@ -2,11 +2,11 @@
 	<view class="page">
 		<view class="list">
 			<u-collapse class="list_group" :head-style="headerStyle">
-				<u-collapse-item v-for="(item, index) in itemList" :key="index" class="list_item">
+				<u-collapse-item v-for="(item, index) in 7" :key="index" class="list_item">
 					<view style="width: inherit;" slot="title">
 						<view class="list_item_title">
-							<text>{{item.head}}</text>
-							<text class="list_item_title_right">{{item.time}}</text>
+							<text>尿结石（丹丹）</text>
+							<text class="list_item_title_right">2020-02-02</text>
 						</view>
 					</view>
 					<view class="">
@@ -37,6 +37,11 @@
 				</u-collapse-item>
 			</u-collapse>
 		</view>
+		<u-loadmore :status="status" v-show="!noData" icon-type="flower" :load-text="customLoadText" bg-color="rgba(249, 249, 249, 1)"
+		 font-size="24" margin-bottom="20" />
+		<u-empty text="暂时没有数据" v-show="noData"></u-empty>
+		<u-toast ref="uToast" />
+		<u-no-network></u-no-network>
 	</view>
 </template>
 
@@ -44,29 +49,17 @@
 	export default {
 		data() {
 			return {
-				itemList: [{
-					head: "尿结石（丹丹）",
-					time: '2020-02-02',
-					body: "只要我们正确择取一个合适的参照物乃至稍降一格去看待他人，值得赏识的东西便会扑面而来",
-					open: true,
-					disabled: true
-				}, {
-					head: "尿结石（豆豆）",
-					time: '2020-02-02',
-					body: "学会欣赏，实际是一种积极生活的态度，是生活的调味品，会在欣赏中发现生活的美",
-					open: false,
-				}, {
-					head: "尿结石（花花）",
-					time: '2020-02-02',
-					body: "但是据说雕刻大卫像所用的这块大理石，曾被多位雕刻家批评得一无是处，有些人认为这块大理石采凿得不好，有些人嫌它的纹路不够美",
-					open: false,
-				}],
 				headerStyle: {
 					width: '100%',
 					height: '88rpx',
 					'padding': '0 10rpx 0 30rpx',
 					'font-size': '24rpx'
-				}
+				},
+				list: [],
+				noData: false,
+				pageNumber: 0,
+				totalPages: 1,
+				status: 'loading',
 			}
 		},
 		onLoad() {},
@@ -75,23 +68,10 @@
 		onPageScroll(options) {
 			if (options.scrollTop > 60) {} else {}
 		},
-		onTabItemTap(e) {},
+		onReachBottom() {
+			console.log(3333333)
+		},
 		methods: {
-			onCall(phone) {
-				uni.showModal({
-					title: '提示',
-					content: '是否要拨打医院电话' + phone,
-					success(res) {
-						if (res.confirm) {
-							// #ifdef APP-PLUS
-							uni.makePhoneCall({
-								phoneNumber: phone
-							});
-							// #endif
-						}
-					}
-				})
-			}
 		}
 	}
 </script>
