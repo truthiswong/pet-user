@@ -36,6 +36,11 @@ const store = new Vuex.Store({
 		// 如果vuex_version无需保存到本地永久存储，无需lifeData.vuex_version方式
 		vuex_version: '1.0.1',
 		vuex_demo: '绛紫',
+		customLoadText: {
+			loadmore: '上拉加载...',
+			loading: '正在加载中...',
+			nomore: '已经没有更多了'
+		}
 	},
 	mutations: {
 		$uStore(state, payload) {
