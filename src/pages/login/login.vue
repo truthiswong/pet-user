@@ -88,6 +88,7 @@
 				}
 			},
 			onLogin() {
+				console.log("login")
 				if (!this.mobile) {
 					this.$refs.uToast.show({
 						title: '请输入您的手机号码',
@@ -99,23 +100,11 @@
 						type: 'warning',
 					})
 				} else {
-					this.$u.api.getSearch({
-						id: 3
-					}).then(res => {
-						console.log(res)
-						this.$u.vuex('vuex_token', "token")
-						this.$refs.uToast.show({
-							title: '登录成功',
-							type: 'success',
-							duration: 500,
-							url: '/pages/tabs/tab1'
-						})
-					})
-					// 调用getInfo接口
-					this.$u.api.getInfo({
-						id: 5
-					}).then(res => {
-						console.log(res);
+					this.$refs.uToast.show({
+						title: '登录成功',
+						type: 'success',
+						duration: 500,
+						url: '/pages/tabs/tab1'
 					})
 				}
 			}
