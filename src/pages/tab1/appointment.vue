@@ -28,13 +28,13 @@
 						</view>
 					</view>
 				</u-cell-item>
-				<u-cell-item @click="showPetType = true" :center="true" :arrow="false" hover-class="none" class="list_item">
+				<!-- <u-cell-item @click="showPetType = true" :center="true" :arrow="false" hover-class="none" class="list_item">
 					<view slot="title" class="list_item_title">宠物类型</view>
 					<view slot="right-icon" class="list_item_right" :class="petTypeValue?'list_item_right_active':''">
 						<text>{{petTypeValue?petTypeValue:'请选择宠物类型'}}</text>
 						<u-icon name="arrow-right" style="margin-left: 30rpx;" color="#B1B6BE" size="28"></u-icon>
 					</view>
-				</u-cell-item>
+				</u-cell-item> -->
 				<u-cell-item @click="showServe = true" :center="true" :arrow="false" hover-class="none" class="list_item">
 					<view slot="title" class="list_item_title">服务选择</view>
 					<view slot="right-icon" class="list_item_right" :class="serveValue?'list_item_right_active':''">
@@ -58,25 +58,15 @@
 				</u-cell-item>
 			</u-cell-group>
 		</view>
-		<view class="">
-			<u-select @confirm="onHospital" v-model="showHospital" :list="hospitalList" title="选择就诊医院" confirm-color="#00AEA5"
-			 :safe-area-inset-bottom="true"></u-select>
-		</view>
-		<view class="">
-			<u-select @confirm="onPet" v-model="showPet" :list="petList" title="选择宠物" confirm-color="#00AEA5"
-			 :safe-area-inset-bottom="true"></u-select>
-		</view>
-		<view class="">
-			<u-select @confirm="onPetType" v-model="showPetType" :list="petTypeList" title="选择宠物类型" confirm-color="#00AEA5"
-			 :safe-area-inset-bottom="true"></u-select>
-		</view>
-		<view class="">
-			<u-action-sheet @click="onServe" :list="serveList" :safe-area-inset-bottom="true" confirm-color="#00AEA5" v-model="showServe"></u-action-sheet>
-		</view>
-		<view class="">
-			<u-picker mode="time" @confirm="onTime" v-model="showTime" :params="params" title="预约时间" :safe-area-inset-bottom="true"
-			 confirm-color="#00AEA5"></u-picker>
-		</view>
+		<u-select @confirm="onHospital" v-model="showHospital" value-name="id" label-name="name" :list="hospitalList" title="选择就诊医院"
+		 confirm-color="#00AEA5" :safe-area-inset-bottom="true"></u-select>
+		<u-select @confirm="onPet" v-model="showPet" value-name="id" label-name="name" :list="petList" title="选择宠物"
+		 confirm-color="#00AEA5" :safe-area-inset-bottom="true"></u-select>
+		<u-select @confirm="onPetType" v-model="showPetType" value-name="id" label-name="name" :list="petTypeList" title="选择宠物类型"
+		 confirm-color="#00AEA5" :safe-area-inset-bottom="true"></u-select>
+		<u-action-sheet @click="onServe" :list="serveList" :safe-area-inset-bottom="true" confirm-color="#00AEA5" v-model="showServe"></u-action-sheet>
+		<u-picker mode="time" @confirm="onTime" v-model="showTime" :params="params" title="预约时间" :safe-area-inset-bottom="true"
+		 confirm-color="#00AEA5"></u-picker>
 		<view class="custom_button">
 			<u-button @click="onNow" type="primary" style="height: 100%;line-height: 100%;border-radius: 0;" :ripple="true"
 			 shape="square">
@@ -92,78 +82,20 @@
 	export default {
 		data() {
 			return {
-				hospitalList: [{
-						value: '1',
-						label: '上海医院'
-					},
-					{
-						value: '2',
-						label: '北京医院'
-					}
-				],
+				hospitalList: [],
 				showHospital: false,
 				hospitalValue: '',
-				petList: [{
-						value: '1',
-						label: '贝贝'
-					},
-					{
-						value: '2',
-						label: '瑞哥'
-					}
-				],
+				hospitalId: '',
+				petList: [],
 				showPet: false,
 				petValue: '',
 				showPetType: false,
 				petTypeValue: '',
-				petTypeList: [{
-						value: '1',
-						label: '狗'
-					},
-					{
-						value: '2',
-						label: '羊'
-					},
-					{
-						value: '3',
-						label: '蛇'
-					},
-					{
-						value: '4',
-						label: '猫'
-					},
-					{
-						value: '5',
-						label: '龟'
-					},
-					{
-						value: '6',
-						label: '其他'
-					}
-				],
-				serveList: [{
-					text: '门诊预约',
-					color: '#323232',
-					fontSize: 30
-				}, {
-					text: '美容造型',
-					color: '#323232',
-					fontSize: 30
-				}, {
-					text: '洗澡类',
-					color: '#323232',
-					fontSize: 30
-				}, {
-					text: '局部剪毛',
-					color: '#323232',
-					fontSize: 30
-				}, {
-					text: '其他服务',
-					color: '#323232',
-					fontSize: 30
-				}],
+				petTypeList: [],
+				serveList: [],
 				showServe: false,
 				serveValue: '',
+				serveId: '',
 				params: {
 					year: true,
 					month: true,
@@ -179,7 +111,9 @@
 		},
 		onLoad() {},
 		onShow() {
+			this.getHospitalList()
 			this.getPetList()
+			// this.getPetTypeList()
 			this.getServeList()
 		},
 		onPullDownRefresh() {},
@@ -189,11 +123,12 @@
 		onTabItemTap(e) {},
 		methods: {
 			btnAClick() {
-							console.log('btnClick');
-						},
+				console.log('btnClick');
+			},
 			onHospital(e) {
 				console.log(e)
 				this.hospitalValue = e[0].label
+				this.hospitalId = e[0].value
 			},
 			onPet(e) {
 				console.log(e)
@@ -204,8 +139,10 @@
 				this.petTypeValue = e[0].label
 			},
 			onServe(index) {
-				console.log(`点击了第${index + 1}项，内容为：${this.serveList[index].text}`)
+				console.log(this.serveList[index])
+				console.log(this.serveList[index].id)
 				this.serveValue = this.serveList[index].text
+				this.serveId = this.serveList[index].id
 			},
 			onTime(e) {
 				console.log(e)
@@ -223,11 +160,6 @@
 						title: '请选择宠物',
 						type: 'warning',
 					})
-				} else if (!this.petTypeValue) {
-					this.$refs.uToast.show({
-						title: '请选择宠物类型',
-						type: 'warning',
-					})
 				} else if (!this.serveValue) {
 					this.$refs.uToast.show({
 						title: '请选择服务类型',
@@ -240,10 +172,10 @@
 					})
 				} else {
 					this.$u.api.appointment({
-						hospital: this.hospitalValue,
+						hospitalId: this.hospitalId,
 						petName: this.petValue,
-						petType: this.petTypeValue,
-						type: this.serveValue,
+						// petType: this.petTypeValue,
+						typeId: this.serveId,
 						appointmentDate: this.timeValue,
 						remark: this.markValue
 					}).then(res => {
@@ -258,31 +190,31 @@
 			getHospitalList() {
 				this.$u.api.hospitalList({}).then(res => {
 					if (res.success) {
-						console.log(res)
-						// this.hospitalList = res.data
+						this.hospitalList = res.data
 					}
 				})
 			},
 			getPetList() {
 				this.$u.api.petList({}).then(res => {
 					if (res.success) {
-						console.log(res)
-						// this.petList = res.data
+						this.petList = res.data
 					}
 				})
 			},
 			getPetTypeList() {
 				this.$u.api.petTypeList({}).then(res => {
 					if (res.success) {
-						console.log(res)
-						// this.petTypeList = res.data
+						this.petTypeList = res.data.data
 					}
 				})
 			},
 			getServeList() {
 				this.$u.api.serveList({}).then(res => {
 					if (res.success) {
-						// this.serveList = res.data
+						for (let item of res.data.data) {
+							item.text = item.name
+						}
+						this.serveList = res.data.data
 					}
 				})
 			},

@@ -37,7 +37,7 @@
 								<text>{{item.petName}}</text>
 							</u-col>
 							<u-col span="6">
-								<text>2020-03-24 15:00</text>
+								<text>{{item.appointmentDate}}</text>
 							</u-col>
 						</u-row>
 					</view>
@@ -101,9 +101,11 @@
 							if (res.data.data.length<=0) {
 								this.noData = true
 							}
+							for (let item of res.data.data) {
+								item.appointmentDate = this.$moment(item.appointmentDate).format('YYYY-MM-DD HH:mm')
+							}
 							this.pageNumber++
 							this.list = this.list.concat(res.data.data)
-							this.list.reverse()
 							this.status = 'loading'
 							this.totalPages = res.data.totalPages
 							if (this.totalPages == this.pageNumber) {

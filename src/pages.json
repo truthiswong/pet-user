@@ -4,6 +4,19 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/login/init",
+			"style": {
+				"navigationBarTitleText": "宠主小助手",
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"backgroundColor": "#FFFFFF",
+				"backgroundColorTop": "#FFFFFF",
+				"h5": {
+					"titleNView": {
+						"backgroundColor": "#FFFFFF"
+					}
+				}
+			}
+		}, {
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "宠主小助手",
@@ -53,14 +66,6 @@
 			"path": "pages/tab1/illnessBill",
 			"style": {
 				"navigationBarTitleText": "病例账单",
-				"navigationBarBackgroundColor":"#ffffff",
-				"onReachBottomDistance": 100
-			}
-		},
-		{
-			"path": "pages/tab1/illnessBillDetail",
-			"style": {
-				"navigationBarTitleText": "病例明细",
 				"navigationBarBackgroundColor":"#ffffff",
 				"onReachBottomDistance": 100
 			}

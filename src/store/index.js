@@ -34,8 +34,8 @@ const store = new Vuex.Store({
 		},
 		vuex_token: lifeData.vuex_token ? lifeData.vuex_token : '',
 		// 如果vuex_version无需保存到本地永久存储，无需lifeData.vuex_version方式
-		vuex_version: '1.0.1',
-		vuex_demo: '绛紫',
+		wxAppID: 'wx8d022398061e88cb',
+		wxCode: '',
 		customLoadText: {
 			loadmore: '上拉加载...',
 			loading: '正在加载中...',
